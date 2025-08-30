@@ -122,6 +122,8 @@ class DataTransformation:
                 filepath=self.data_transformation_config.preprocessor_obj_file_path,
                 obj=preprocessing_obj,
             )
+            # logging.info(f"Train Shape: {train_arr.shape}")
+            # logging.info(f"Test Shape: {test_arr.shape}")
 
             return (
                 train_arr,
