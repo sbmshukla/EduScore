@@ -10,7 +10,7 @@ from sklearn.ensemble import (
     GradientBoostingRegressor,
     RandomForestRegressor,
 )
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, ElasticNet
 from sklearn.metrics import r2_score
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeRegressor
@@ -47,6 +47,7 @@ class ModelTrainer:
             # Dictionary of models without parameters
             models = {
                 "LinearRegression": LinearRegression(),
+                "ElasticNet": ElasticNet(),
                 "DecisionTree": DecisionTreeRegressor(),
                 "RandomForest": RandomForestRegressor(),
                 "GradientBoosting": GradientBoostingRegressor(),
@@ -56,12 +57,29 @@ class ModelTrainer:
                 "CatBoost": CatBoostRegressor(),
             }
 
+            param_grids = {
+                "RandomForest": {
+                    "n_estimators": [50, 100],
+                    "max_depth": [None, 5],
+                    "min_samples_split": [2, 5],
+                },
+                "ElasticNet": {
+                    "alpha": [0.01, 0.1, 1.0, 10.0],  # Regularization strength
+                    "l1_ratio": [
+                        0.1,
+                        0.5,
+                        0.9,
+                    ],  # Mix between L1 (Lasso) and L2 (Ridge)
+                },
+            }
+
             model_report = evaluate_model(
                 X_train=X_train,
                 y_train=y_train,
                 X_test=X_test,
                 y_test=y_test,
                 models=models,
+                param_grids=param_grids,
             )
 
             # Find best model based on test R²
@@ -70,7 +88,10 @@ class ModelTrainer:
             )
             best_model_score = model_report[best_model_name]["test_r2"]
 
-            best_model = models[best_model_name]
+            # best_model = models[best_model_name]
+            # ✅ Get the trained model from report, not from models
+
+            best_model = model_report[best_model_name]["model"]
 
             if best_model_score < 0.6:
                 logging.info("No Best Model Found!")
