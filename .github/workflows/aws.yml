@@ -73,6 +73,13 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
+      # ✅ Cleanup after build
+      - name: Clean up Docker
+        if: always()
+        run: |
+          docker system prune -af --volumes
+          df -h
+
   Continuous-Deployment:
     needs: build-and-push-ecr-image
     runs-on: self-hosted
