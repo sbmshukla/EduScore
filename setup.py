@@ -19,9 +19,9 @@ def get_requirements(filename: str) -> List[str]:
 
 
 setup(
-    name="mlproject",
+    name="eduscore",
     version="0.0.1",
-    author="Shubham",
+    author="sbmshukla",
     author_email="sbmshukla17@gmail.com",
     packages=find_packages(),
     install_requires=get_requirements("requirements.txt"),
