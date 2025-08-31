@@ -1,7 +1,3 @@
-import logging
-
-logging.basicConfig(level=logging.INFO)
-
 from doctest import debug
 from flask import Flask, request, render_template
 import numpy as np
