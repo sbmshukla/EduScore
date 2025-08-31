@@ -8,15 +8,13 @@ import os
 
 application = Flask(__name__)
 
-app = application
 
-
-@app.route("/")
+@application.route("/")
 def index():
     return render_template("index.html")
 
 
-@app.route("/prediction", methods=["GET", "POST"])
+@application.route("/prediction", methods=["GET", "POST"])
 def predict_datapoint():
     if request.method == "GET":
         return render_template("home.html")
