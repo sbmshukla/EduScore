@@ -1,3 +1,7 @@
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 from doctest import debug
 from flask import Flask, request, render_template
 import numpy as np
@@ -39,4 +43,4 @@ def predict_datapoint():
 
 if __name__ == "__main__":
     # application.run(host="0.0.0.0")
-    application.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    application.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
