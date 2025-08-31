@@ -29,3 +29,18 @@ data/
 # Ignore Docker-related files
 Dockerfile
 docker-compose.yml
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+.env
+.venv
+.vscode
+.git
+.gitignore
+Dockerfile
+README.md
