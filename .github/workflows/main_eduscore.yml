@@ -25,15 +25,15 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: eduscore.azurecr.io/
-          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_F28C8D33D5074573B0520FDA3E0CE08E }}
-          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_4131798134CC4772AB1191ED72CF72F0 }}
+          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_69B9DC414EF54FD195D1B5885ACEE498 }}
+          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_4F062013BB7549AB8A9C990668F7E2C3 }}
 
       - name: Build and push container image to registry
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: eduscore.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_F28C8D33D5074573B0520FDA3E0CE08E }}/eduscore.azurecr.io/eduscore:f961d56d3446326bb186ecc6d15cce7c8710d9d3:${{ github.sha }}
+          tags: eduscore.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_69B9DC414EF54FD195D1B5885ACEE498 }}/eduscore:${{ github.sha }}
           file: ./Dockerfile
 
   deploy:
@@ -50,9 +50,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_00C992E3997348C6A28513668580199F }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_989628D0CFA34233AA6641261658711A }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E8C5AD01DA3D4AC8897E3A80E523D76E }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_247D51C46CE243E3AF5145941E0103E0 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_013C454E61C14F88AC18DE8FF464A211 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6FA449A8F17741C696B823150CE52886 }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -60,5 +60,5 @@ jobs:
         with:
           app-name: 'eduscore'
           slot-name: 'Production'
-          images: 'eduscore.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_F28C8D33D5074573B0520FDA3E0CE08E }}/eduscore.azurecr.io/eduscore:f961d56d3446326bb186ecc6d15cce7c8710d9d3:${{ github.sha }}'
+          images: 'eduscore.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_69B9DC414EF54FD195D1B5885ACEE498 }}/eduscore:${{ github.sha }}'
           
