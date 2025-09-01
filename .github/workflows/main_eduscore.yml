@@ -43,10 +43,8 @@ jobs:
       contents: read #This is required for actions/checkout
 
     needs: build
-    
 
     steps:
-      
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -58,7 +56,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'eduscore'
-          slot-name: 'Production'
-          images: 'mycontainerregistry.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_0394EEF0143446349972CD57F4AE2869 }}/eduscore:${{ github.sha }}'
-          
+          app-name: "eduscore"
+          slot-name: "Production"
+          images: "eduscore.azurecr.io/eduscore:${{ github.sha }}"
