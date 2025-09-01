@@ -1,0 +1,64 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - eduscore
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read #This is required for actions/checkout
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to container registry
+        uses: docker/login-action@v2
+        with:
+          registry: eduscore.azurecr.io/
+          username: ${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_FD8CD6EC84DB4E92A7844D1BE1A6B6CB }}
+          password: ${{ secrets.AZUREAPPSERVICE_CONTAINERPASSWORD_64540153AB964843B539726571083473 }}
+
+      - name: Build and push container image to registry
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: eduscore.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_FD8CD6EC84DB4E92A7844D1BE1A6B6CB }}/docker push eduscore.azurecr.io/eduscore:${{ github.sha }}
+          file: ./Dockerfile
+
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
+
+    needs: build
+    
+
+    steps:
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_9E867B985BAA45A2A48478E4BC444FE3 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_355C0E5DDB1644AFA1DECFDC223DE013 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_B78E6436BAF84FF3923C636E928BF78B }}
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'eduscore'
+          slot-name: 'Production'
+          images: 'eduscore.azurecr.io/${{ secrets.AZUREAPPSERVICE_CONTAINERUSERNAME_FD8CD6EC84DB4E92A7844D1BE1A6B6CB }}/docker push eduscore.azurecr.io/eduscore:${{ github.sha }}'
+          
